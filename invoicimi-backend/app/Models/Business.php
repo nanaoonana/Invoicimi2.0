@@ -43,4 +43,12 @@ class Business extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the invoices for the business.
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

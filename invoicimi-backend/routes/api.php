@@ -41,3 +41,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/business', [BusinessController::class, 'update'])->name('business.update');
     // Note: DELETE /business could be added if needed
 });
+
+// Dashboard API Routes
+use App\Http\Controllers\Api\DashboardController;
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/dashboard/stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
+    Route::get('/dashboard/recent-invoices', [DashboardController::class, 'getRecentInvoices'])->name('dashboard.recent-invoices');
+});
