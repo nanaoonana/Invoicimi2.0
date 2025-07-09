@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Invoice - Invoicimi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin-left: 250px; /* Add margin to body to account for fixed sidebar */
+        }
+        @media (max-width: 768px) {
+            body {
+                margin-left: 0; /* Remove margin on mobile */
+            }
+        }
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto; /* Changed to auto to allow scrolling if content is too long */
+            height: 100vh;
+            z-index: 20; /* Ensure sidebar is above other content */
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 40;
+                height: 100vh;
+                overflow-y: auto;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+        /* Add this to ensure content stays below the sidebar */
+        main {
+            position: relative;
+            z-index: 10;
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex" x-data="invoiceApp()" x-init="init()">
+    <!-- Sidebar -->
+    <aside class="sidebar bg-blue-900 text-white flex-shrink-0">
+        <div class="p-4 border-b border-blue-800">
+            <h2 class="text-xl font-bold">Invoicimi</h2>
+            <p class="text-blue-200 text-sm">Create Invoice</p>
+        </div>
+        <nav class="mt-4">
+            <a href="dashboard.html" class="flex items-center px-4 py-3 text-blue-100 hover:bg-blue-800">
+                <i class="fas fa-home w-6"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="invoices.html" class="flex items-center px-4 py-3 text-blue-100 hover:bg-blue-800">
+                <i class="fas fa-file-invoice-dollar w-6"></i>
+                <span>Invoices</span>
+            </a>
+            <a href="clients.html" class="flex items-center px-4 py-3 text-blue-100 hover:bg-blue-800">
+                <i class="fas fa-users w-6"></i>
+                <span>Clients</span>
+            </a>
+            <a href="settings.html" class="flex items-center px-4 py-3 text-blue-100 hover:bg-blue-800">
+                <i class="fas fa-cog w-6"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+        <div class="p-4 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Create New Invoice</h1>
+                    <p class="text-gray-600">Fill in the details below to create a new invoice</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button @click="saveDraft()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                        Save as Draft
+                    </button>
+                    <button @click="previewInvoice()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Preview Invoice
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Sections -->
+            <form @submit.prevent="submitInvoice" class="space-y-8">
+                <!-- 1. Business Information -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-800 w-8 h-8 rounded-full flex items-center justify-center mr-3">1</span>
+                        Business Information
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+                            <input type="text" x-model="business.name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Business Logo</label>
+                            <div class="mt-1 flex items-center">
+                                <span x-show="!business.logo" class="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-100">
+                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                </span>
+                                <img x-show="business.logo" :src="business.logo" class="h-10 w-auto rounded-lg" alt="Business Logo">
+                                <button type="button" class="ml-3 px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    Change
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Business Email</label>
+                            <input type="email" x-model="business.email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Business Phone</label>
+                            <input type="tel" x-model="business.phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Client Details -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-800 w-8 h-8 rounded-full flex items-center justify-center mr-3">2</span>
+                        Client Details
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                        <div class="md:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client</label>
+                            <div class="mt-1 flex rounded-lg shadow-sm">
+                                <select x-model="client.id" @change="selectClient($event)" class="flex-1 min-w-0 block w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Select a client or add new</option>
+                                    <template x-for="client in clients" :key="client.id">
+                                        <option :value="client.id" x-text="client.name"></option>
+                                    </template>
+                                </select>
+                                <button type="button" @click="showNewClient = true" class="ml-3 inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <i class="fas fa-plus mr-1"></i> New
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
+                            <input type="text" x-model="client.name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Email</label>
+                            <input type="email" x-model="client.email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Phone</label>
+                            <input type="tel" x-model="client.phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Invoice Details -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-800 w-8 h-8 rounded-full flex items-center justify-center mr-3">3</span>
+                        Invoice Details
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Number</label>
+                            <input type="text" x-model="invoice.number" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Date</label>
+                            <div class="relative">
+                                <input type="text" x-ref="invoiceDate" :value="formatDate(invoice.date)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+                            <div class="relative">
+                                <input type="text" x-ref="dueDate" :value="formatDate(invoice.dueDate)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+                            <select x-model="invoice.currency" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <option value="GHS">Ghana Cedi (GHS)</option>
+                                <option value="USD">US Dollar (USD)</option>
+                                <option value="EUR">Euro (EUR)</option>
+                                <option value="GBP">British Pound (GBP)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Line Items Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Items</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="px-6 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <template x-for="(item, index) in invoice.items" :key="index">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="text" x-model="item.name" @input="calculateLineItem(index)" 
+                                           class="w-full px-2 py-1 border rounded" required>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="text" x-model="item.description" 
+                                           class="w-full px-2 py-1 border rounded">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="number" min="1" x-model.number="item.quantity" 
+                                           @input="calculateLineItem(index)" 
+                                           class="w-20 px-2 py-1 border rounded text-right" required>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <input type="number" step="0.01" min="0" x-model.number="item.unitPrice" 
+                                               @input="calculateLineItem(index)" 
+                                               class="w-24 px-2 py-1 border rounded text-right" required>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right" 
+                                    x-text="formatCurrency(item.amount)"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <button type="button" @click="removeLineItem(index)" 
+                                            class="text-red-600 hover:text-red-800" 
+                                            x-show="invoice.items.length > 1">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <div class="mt-4">
+                    <button type="button" @click="addLineItem" 
+                            class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-plus mr-1"></i> Add Another Item
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Summary</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                        <textarea x-model="invoice.notes" rows="3" 
+                                  class="w-full px-3 py-2 border rounded-md"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+                        <select x-model="invoice.paymentMethod" 
+                                class="w-full px-3 py-2 border rounded-md">
+                            <option value="mobile_money">Mobile Money</option>
+                            <option value="cash">Cash</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="paypal">PayPal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span>Subtotal:</span>
+                        <span x-text="formatCurrency(invoice.subtotal)"></span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="flex-1">
+                            <label class="block text-sm text-gray-600">Tax:</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="number" min="0" max="100" x-model.number="invoice.taxRate" 
+                                   @input="calculateTotals" 
+                                   class="w-20 px-2 py-1 border rounded text-right mr-2">
+                            <span>%</span>
+                        </div>
+                        <span x-text="formatCurrency(invoice.taxAmount)" class="w-24 text-right"></span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="flex-1">
+                            <label class="block text-sm text-gray-600">Discount:</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="number" min="0" x-model.number="invoice.discount" 
+                                   @input="calculateTotals" 
+                                   class="w-20 px-2 py-1 border rounded text-right mr-2">
+                            <select x-model="invoice.discountType" @change="calculateTotals" 
+                                    class="px-2 py-1 border rounded">
+                                <option value="fixed">$</option>
+                                <option value="percentage">%</option>
+                            </select>
+                        </div>
+                        <span x-text="formatCurrency(invoice.discountAmount)" 
+                              class="w-24 text-right" 
+                              :class="{'text-red-600': invoice.discount > 0}"></span>
+                    </div>
+                    <div class="border-t pt-2 mt-2">
+                        <div class="flex justify-between font-bold">
+                            <span>Total:</span>
+                            <span x-text="formatCurrency(invoice.total)"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <main class="flex-1 overflow-auto pb-24">  <!-- Added pb-24 for bottom padding -->
+            <div class="p-4 md:p-8">
+                <!-- Rest of your content -->
+            </div>
+        </main>
+
+       <!-- Action Buttons -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg overflow-x-auto">
+    <div class="flex space-x-4 min-w-max w-full justify-end">
+        <button type="button" @click="saveDraft" 
+                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 whitespace-nowrap">
+            Save Draft
+        </button>
+        <button type="button" @click="previewInvoice" 
+                class="px-4 py-2 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 whitespace-nowrap">
+            Preview
+        </button>
+        <button type="button" @click="downloadPDF" 
+                class="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200 whitespace-nowrap">
+            Download PDF
+        </button>
+        <button type="button" @click="sendInvoice" 
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 whitespace-nowrap">
+            Send Invoice
+        </button>
+    </div>
+</div>
+
+    <!-- Invoice Preview Modal -->
+    <div x-show="showPreview" @click.self="showPreview = false" 
+         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" 
+         x-cloak>
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Invoice Preview</h3>
+                    <button @click="showPreview = false" 
+                            class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="watermark" x-show="!invoice.paid">UNPAID</div>
+                <div class="relative bg-white p-8 rounded-lg">
+                    <!-- Invoice Header -->
+                    <div class="flex justify-between mb-8">
+                        <div>
+                            <h2 class="text-2xl font-bold" x-text="business.name"></h2>
+                            <p x-text="business.address"></p>
+                            <p>Email: <span x-text="business.email"></span></p>
+                            <p>Phone: <span x-text="business.phone"></span></p>
+                        </div>
+                        <div class="text-right">
+                            <h1 class="text-2xl font-bold">INVOICE</h1>
+                            <p>#<span x-text="invoice.number"></span></p>
+                            <p>Date: <span x-text="formatDate(invoice.date)"></span></p>
+                            <p>Due: <span x-text="formatDate(invoice.dueDate)"></span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Bill To -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div>
+                            <h3 class="font-bold mb-2">Bill To:</h3>
+                            <p x-text="client.name"></p>
+                            <p x-text="client.email"></p>
+                            <p x-text="client.phone"></p>
+                        </div>
+                        <div class="text-right">
+                            <h3 class="font-bold mb-2">Payment Method:</h3>
+                            <p x-text="getPaymentMethod()"></p>
+                            <template x-if="['bank_transfer','mobile_money'].includes(invoice.paymentMethod)">
+                                <div class="mt-2 p-2 bg-gray-50 rounded">
+                                    <template x-if="invoice.paymentMethod === 'bank_transfer'">
+                                        <div>
+                                            <p>Bank: <span x-text="business.bankName"></span></p>
+                                            <p>Account: <span x-text="business.accountNumber"></span></p>
+                                            <p>SWIFT: <span x-text="business.swiftCode"></span></p>
+                                        </div>
+                                    </template>
+                                    <template x-if="invoice.paymentMethod === 'mobile_money'">
+                                        <div>
+                                            <p>Network: <span x-text="business.mobileNetwork"></span></p>
+                                            <p>Number: <span x-text="business.mobileNumber"></span></p>
+                                            <p>Name: <span x-text="business.name"></span></p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    
+                    <!-- Line Items -->
+                    <div class="mb-8">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="text-left p-2 border">Item</th>
+                                    <th class="text-right p-2 border">Qty</th>
+                                    <th class="text-right p-2 border">Unit Price</th>
+                                    <th class="text-right p-2 border">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="item in invoice.items" :key="item.id">
+                                    <tr>
+                                        <td class="p-2 border" x-text="item.name"></td>
+                                        <td class="p-2 border text-right" x-text="item.quantity"></td>
+                                        <td class="p-2 border text-right" x-text="formatCurrency(item.unitPrice)"></td>
+                                        <td class="p-2 border text-right" x-text="formatCurrency(item.amount)"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-right p-2 border">Subtotal:</td>
+                                    <td class="p-2 border text-right" x-text="formatCurrency(invoice.subtotal)"></td>
+                                </tr>
+                                <tr x-show="invoice.taxRate > 0">
+                                    <td colspan="3" class="text-right p-2 border">Tax (<span x-text="invoice.taxRate"></span>%):</td>
+                                    <td class="p-2 border text-right" x-text="formatCurrency(invoice.taxAmount)"></td>
+                                </tr>
+                                <tr x-show="invoice.discount > 0">
+                                    <td colspan="3" class="text-right p-2 border">
+                                        Discount (<span x-text="invoice.discount"></span><span x-text="invoice.discountType === 'percentage' ? '%' : ''"></span>):
+                                    </td>
+                                    <td class="p-2 border text-right" x-text="'-' + formatCurrency(invoice.discountAmount)"></td>
+                                </tr>
+                                <tr class="font-bold bg-gray-50">
+                                    <td colspan="3" class="text-right p-2 border">Total:</td>
+                                    <td class="p-2 border text-right" x-text="formatCurrency(invoice.total)"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                    <!-- Notes -->
+                    <div x-show="invoice.notes" class="mt-8 pt-4 border-t">
+                        <h3 class="font-bold mb-2">Notes:</h3>
+                        <p x-text="invoice.notes" class="whitespace-pre-line"></p>
+                    </div>
+                    
+                    <!-- Payment Status -->
+                    <div class="mt-8 pt-4 border-t text-center">
+                        <span class="inline-block px-4 py-2 rounded-full" 
+                              :class="invoice.paid ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'"
+                              x-text="invoice.paid ? 'PAID' : 'PENDING PAYMENT'">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-6 py-3 flex justify-end space-x-3">
+                <button @click="markAsPaid" 
+                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                        x-show="!invoice.paid">
+                    Mark as Paid
+                </button>
+                <button @click="downloadPDF" 
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    Download PDF
+                </button>
+                <button @click="sendInvoice" 
+                        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                    Send to Client
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function invoiceApp() {
+            return {
+                showPreview: false,
+                business: {
+                    name: "Your Business Name",
+                    email: "contact@yourbusiness.com",
+                    phone: "+1 (555) 123-4567",
+                    address: "123 Business St, City, Country",
+                    bankName: "Example Bank",
+                    accountNumber: "1234567890",
+                    swiftCode: "EXMPLUS33",
+                    mobileNetwork: "MTN Mobile Money",
+                    mobileNumber: "+1 (555) 987-6543"
+                },
+                client: {
+                    name: "",
+                    email: "",
+                    phone: "",
+                    address: ""
+                },
+                invoice: {
+                    number: "",
+                    date: new Date().toISOString().split('T')[0],
+                    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    items: [
+                        { id: 1, name: "", description: "", quantity: 1, unitPrice: 0, amount: 0 }
+                    ],
+                    subtotal: 0,
+                    taxRate: 0,
+                    taxAmount: 0,
+                    discount: 0,
+                    discountType: "fixed",
+                    discountAmount: 0,
+                    total: 0,
+                    notes: "",
+                    paymentMethod: "bank_transfer",
+                    paid: false
+                },
+                clients: [
+                    { id: 1, name: "John Doe", email: "john@example.com", phone: "+1 (555) 123-4567" },
+                    { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "+1 (555) 987-6543" }
+                ],
+
+                init() {
+                    this.generateInvoiceNumber();
+                    this.calculateTotals();
+                },
+
+                // Generate a random invoice number
+                generateInvoiceNumber() {
+                    const prefix = "INV";
+                    const randomNum = Math.floor(10000 + Math.random() * 90000);
+                    this.invoice.number = `${prefix}-${randomNum}`;
+                },
+
+                // Add a new line item
+                addLineItem() {
+                    const newId = this.invoice.items.length > 0 
+                        ? Math.max(...this.invoice.items.map(item => item.id)) + 1 
+                        : 1;
+                    this.invoice.items.push({
+                        id: newId,
+                        name: "",
+                        description: "",
+                        quantity: 1,
+                        unitPrice: 0,
+                        amount: 0
+                    });
+                },
+
+                // Remove a line item
+                removeLineItem(index) {
+                    if (this.invoice.items.length > 1) {
+                        this.invoice.items.splice(index, 1);
+                        this.calculateTotals();
+                    }
+                },
+
+                // Calculate line item amount
+                calculateLineItem(index) {
+                    const item = this.invoice.items[index];
+                    item.amount = item.quantity * item.unitPrice;
+                    this.calculateTotals();
+                },
+
+                // Calculate all totals
+                calculateTotals() {
+                    // Calculate subtotal
+                    this.invoice.subtotal = this.invoice.items.reduce((sum, item) => sum + item.amount, 0);
+
+                    // Calculate tax
+                    this.invoice.taxAmount = this.invoice.subtotal * (this.invoice.taxRate / 100);
+
+                    // Calculate discount
+                    if (this.invoice.discount > 0) {
+                        if (this.invoice.discountType === 'percentage') {
+                            this.invoice.discountAmount = this.invoice.subtotal * (this.invoice.discount / 100);
+                        } else {
+                            this.invoice.discountAmount = Math.min(this.invoice.discount, this.invoice.subtotal);
+                        }
+                    } else {
+                        this.invoice.discountAmount = 0;
+                    }
+
+                    // Calculate total
+                    this.invoice.total = this.invoice.subtotal + this.invoice.taxAmount - this.invoice.discountAmount;
+                },
+
+                // Format currency
+                formatCurrency(amount) {
+                    return new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                    }).format(amount);
+                },
+
+                // Format date
+                formatDate(dateString) {
+                    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                    return new Date(dateString).toLocaleDateString(undefined, options);
+                },
+
+                // Get payment method display text
+                getPaymentMethod() {
+                    const methods = {
+                        'bank_transfer': 'Bank Transfer',
+                        'mobile_money': 'Mobile Money',
+                        'cash': 'Cash',
+                        'paypal': 'PayPal'
+                    };
+                    return methods[this.invoice.paymentMethod] || this.invoice.paymentMethod;
+                },
+
+                // Preview invoice
+                previewInvoice() {
+                    if (this.validateForm()) {
+                        this.showPreview = true;
+                    }
+                },
+
+                // Save as draft
+                saveDraft() {
+                    // In a real app, save to localStorage or API
+                    console.log('Saving draft:', this.invoice);
+                    alert('Draft saved successfully!');
+                },
+
+                // Download as PDF
+                downloadPDF() {
+                    // In a real app, generate and download PDF
+                    console.log('Generating PDF...');
+                    alert('PDF download would start here');
+                },
+
+                // Send invoice
+                sendInvoice() {
+                    if (this.validateForm()) {
+                        // In a real app, send email/WhatsApp
+                        console.log('Sending invoice...');
+                        alert('Invoice sent successfully!');
+                    }
+                },
+
+                // Mark as paid
+                markAsPaid() {
+                    this.invoice.paid = true;
+                    // In a real app, update in database
+                    console.log('Marked as paid:', this.invoice);
+                },
+
+                // Validate form
+                validateForm() {
+                    // Check client details
+                    if (!this.client.name.trim()) {
+                        alert('Please enter client name');
+                        return false;
+                    }
+
+                    // Check line items
+                    for (let i = 0; i < this.invoice.items.length; i++) {
+                        const item = this.invoice.items[i];
+                        if (!item.name.trim()) {
+                            alert(`Please enter a name for item #${i + 1}`);
+                            return false;
+                        }
+                        if (item.quantity <= 0) {
+                            alert(`Please enter a valid quantity for ${item.name || 'item #' + (i + 1)}`);
+                            return false;
+                        }
+                        if (item.unitPrice < 0) {
+                            alert(`Please enter a valid price for ${item.name || 'item #' + (i + 1)}`);
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            };
+        }
+    </script>
+</body>
+</html>
+                
+            </form>
+        </div>
+    </main>
+
+    <!-- Mobile menu button -->
+    <button class="md:hidden fixed bottom-4 right-4 bg-blue-900 text-white p-3 rounded-full shadow-lg z-30" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        function invoiceApp() {
+            return {
+                // App state
+                showPreview: false,
+                showNewClient: false,
+                business: {
+                    name: "My Business Name",
+                    logo: "",
+                    email: "business@example.com",
+                    phone: "+233 24 123 4567"
+                },
+                client: {
+                    id: "",
+                    name: "",
+                    email: "",
+                    phone: ""
+                },
+                clients: [
+                    { id: "1", name: "John Doe", email: "john@example.com", phone: "+233 24 765 4321" },
+                    { id: "2", name: "Jane Smith", email: "jane@example.com", phone: "+233 20 123 4567" },
+                    { id: "3", name: "Acme Corp", email: "info@acme.com", phone: "+233 30 987 6543" }
+                ],
+                invoice: {
+                    number: "",
+                    date: new Date(),
+                    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+                    currency: "GHS",
+                    items: [
+                        { name: "", description: "", quantity: 1, unitPrice: 0, amount: 0 }
+                    ],
+                    subtotal: 0,
+                    taxRate: 0,
+                    taxAmount: 0,
+                    discount: 0,
+                    discountType: "fixed", // or "percentage"
+                    discountAmount: 0,
+                    total: 0,
+                    notes: "",
+                    paymentMethod: "mobile_money",
+                    customPaymentMethod: "",
+                    status: "draft"
+                },
+
+                // Initialize the app
+                init() {
+                    // Generate invoice number
+                    this.generateInvoiceNumber();
+                    
+                    // Initialize datepickers
+                    this.initDatepickers();
+                    
+                    // Load business info from localStorage if available
+                    this.loadBusinessInfo();
+                    
+                    // Load clients from localStorage if available
+                    this.loadClients();
+                    
+                    // Set up mobile menu toggle
+                    this.setupMobileMenu();
+                },
+                
+                // Set up mobile menu toggle
+                setupMobileMenu() {
+                    const menuToggle = document.getElementById('menu-toggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    
+                    if (menuToggle) {
+                        menuToggle.addEventListener('click', () => {
+                            sidebar.classList.toggle('active');
+                        });
+                    }
+                },
+                
+                // Datepicker initialization
+                initDatepickers() {
+                    const invoiceDatePicker = new Datepicker(this.$refs.invoiceDate, {
+                        format: 'yyyy-mm-dd',
+                        defaultDate: this.invoice.date,
+                        onSelect: (date) => {
+                            this.invoice.date = date;
+                            this.updateDueDate();
+                        }
+                    });
+                    
+                    const dueDatePicker = new Datepicker(this.$refs.dueDate, {
+                        format: 'yyyy-mm-dd',
+                        defaultDate: this.invoice.dueDate,
+                        onSelect: (date) => {
+                            this.invoice.dueDate = date;
+                        }
+                    });
+                },
+                
+                // Generate a new invoice number
+                generateInvoiceNumber() {
+                    // In a real app, this would come from your backend
+                    const prefix = "INV";
+                    const randomNum = Math.floor(100000 + Math.random() * 900000);
+                    this.invoice.number = `${prefix}-${randomNum}`;
+                },
+                
+                // Format date as YYYY-MM-DD
+                formatDate(date) {
+                    if (!date) return '';
+                    const d = new Date(date);
+                    return d.toISOString().split('T')[0];
+                },
+                
+                // Format currency
+                formatCurrency(amount) {
+                    return new Intl.NumberFormat('en-GH', {
+                        style: 'currency',
+                        currency: this.invoice.currency,
+                        minimumFractionDigits: 2
+                    }).format(amount);
+                },
+                
+                // Select client from dropdown
+                selectClient(event) {
+                    const clientId = event.target.value;
+                    if (!clientId) return;
+                    
+                    const selectedClient = this.clients.find(c => c.id === clientId);
+                    if (selectedClient) {
+                        this.client = { ...selectedClient };
+                    }
+                },
+                
+                // Load business info from localStorage
+                loadBusinessInfo() {
+                    const savedBusiness = localStorage.getItem('businessInfo');
+                    if (savedBusiness) {
+                        this.business = JSON.parse(savedBusiness);
+                    }
+                },
+                
+                // Load clients from localStorage
+                loadClients() {
+                    const savedClients = localStorage.getItem('clients');
+                    if (savedClients) {
+                        this.clients = JSON.parse(savedClients);
+                    }
+                },
+                
+                // Save draft invoice
+                saveDraft() {
+                    this.invoice.status = 'draft';
+                    this.saveInvoice();
+                    alert('Draft saved successfully!');
+                },
+                
+                // Save invoice (placeholder for now)
+                saveInvoice() {
+                    // In a real app, this would save to your backend
+                    console.log('Saving invoice:', this.invoice);
+                },
+                
+                // Preview invoice
+                previewInvoice() {
+                    this.showPreview = true;
+                    // In a real app, this would generate a preview of the invoice
+                    setTimeout(() => {
+                        const previewEl = document.getElementById('invoice-preview');
+                        if (previewEl) {
+                            previewEl.innerHTML = `
+                                <div class="bg-white p-6 rounded-lg">
+                                    <h3 class="text-xl font-bold mb-4">Invoice Preview</h3>
+                                    <p class="text-gray-600">This is a preview of how your invoice will look.</p>
+                                    <!-- More preview content would go here -->
+                                </div>
+                            `;
+                        }
+                    }, 500);
+                },
+                
+                // Submit invoice
+                submitInvoice() {
+                    if (!this.validateForm()) return;
+                    
+                    this.invoice.status = 'sent';
+                    this.saveInvoice();
+                    alert('Invoice created and sent successfully!');
+                    // Redirect to invoices page or reset form
+                    // window.location.href = 'invoices.html';
+                },
+                
+                // Validate form
+                validateForm() {
+                    if (!this.client.name) {
+                        alert('Please enter client name');
+                        return false;
+                    }
+                    
+                    // Validate line items
+                    for (let i = 0; i < this.invoice.items.length; i++) {
+                        const item = this.invoice.items[i];
+                        if (!item.name) {
+                            alert(`Please enter a name for item #${i + 1}`);
+                            return false;
+                        }
+                        
+                        if (item.quantity <= 0) {
+                            alert(`Please enter a valid quantity for ${item.name}`);
+                            return false;
+                        }
+                        
+                        if (item.unitPrice < 0) {
+                            alert(`Please enter a valid price for ${item.name}`);
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                }
+            };
+        }
+    </script>
+</body>
+</html>

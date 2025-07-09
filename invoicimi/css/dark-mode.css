@@ -1,0 +1,133 @@
+/* css/dark-mode.css */
+/* Base styles */
+:root {
+    --color-bg: #ffffff;
+    --color-text: #1a202c;
+    --color-primary: #1e40af;
+    --color-secondary: #4b5563;
+    --color-border: #e5e7eb;
+}
+/* Add to your CSS file */
+.feature-card {
+    transition: all 0.3s ease;
+}
+
+.feature-card.pointer-events-none {
+    position: relative;
+}
+
+.feature-card.pointer-events-none::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+}
+
+.upgrade-prompt {
+    display: none;
+}
+
+.pointer-events-none .upgrade-prompt {
+    display: block;
+}
+
+.dark {
+    --color-bg: #111827;
+    --color-text: #f3f4f6;
+    --color-primary: #60a5fa;
+    --color-secondary: #9ca3af;
+    --color-border: #374151;
+}
+
+/* Apply dark mode to all sections */
+.dark body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+/* Text colors */
+.dark h1, 
+.dark h2, 
+.dark h3, 
+.dark h4, 
+.dark h5, 
+.dark h6 {
+    color: white;
+}
+
+.dark p,
+.dark span,
+.dark div:not(.no-dark) {
+    color: #e5e7eb;
+}
+
+/* Backgrounds */
+.dark .bg-white {
+    background-color: #1f2937;
+}
+
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+    background-color: #111827;
+}
+
+/* Cards and containers */
+.dark .card,
+.dark .feature-card,
+.dark .pricing-card {
+    background-color: #1f2937;
+    border-color: #374151;
+}
+
+/* Forms */
+.dark input,
+.dark textarea,
+.dark select {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: white;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* Buttons */
+.dark .btn-primary {
+    background-color: #3b82f6;
+}
+
+.dark .btn-primary:hover {
+    background-color: #2563eb;
+}
+
+/* Navigation */
+.dark nav {
+    background-color: #1f2937;
+    border-bottom: 1px solid #374151;
+}
+
+/* Footer */
+.dark footer {
+    background-color: #111827;
+    border-top: 1px solid #374151;
+}
+
+/* Tables */
+.dark table {
+    border-color: #374151;
+}
+
+.dark th,
+.dark td {
+    border-color: #374151;
+}
+
+.dark tr:nth-child(even) {
+    background-color: #1f2937;
+}

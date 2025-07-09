@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoicimi - Professional Invoicing Made Simple for Ghana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dark-mode.css">
+    <script src="js/dark-mode.js" defer></script>
+    <script src="js/plan-restrictions.js" defer></script>
+    </head>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            800: '#1f2937',
+                            900: '#111827',
+                        },
+                        blue: {
+                            900: '#1e3a8a',
+                            800: '#1e40af',
+                            700: '#1d4ed8',
+                            600: '#2563eb',
+                            500: '#3b82f6',
+                            400: '#60a5fa',
+                            300: '#93c5fd',
+                            200: '#bfdbfe',
+                            100: '#dbeafe',
+                            50: '#eff6ff',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                },
+            },
+            plugins: [],
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #030463 0%, #2a0379 100%);
+        }
+        .feature-card {
+            @apply transition-all duration-300 ease-in-out dark:bg-gray-800 dark:border-gray-700;
+        }
+        .feature-card:hover {
+            @apply transform -translate-y-1 shadow-lg dark:shadow-gray-800/50;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-sm fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-900 dark:text-blue-400">Invoicimi</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#features" class="text-gray-700 hover:text-blue-900 dark:text-gray-300 dark:hover:text-blue-400 font-medium transition-colors rounded-full px-4 py-2">Features</a>
+                    <a href="#pricing" class="text-gray-700 hover:text-blue-900 dark:text-gray-300 dark:hover:text-blue-400 font-medium transition-colors rounded-full px-4 py-2">Pricing</a>
+                    <a href="#about" class="text-gray-700 hover:text-blue-900 dark:text-gray-300 dark:hover:text-blue-400 font-medium transition-colors rounded-full px-4 py-2">About</a>
+                    <a href="#testimonials" class="text-gray-700 hover:text-blue-900 dark:text-gray-300 dark:hover:text-blue-400 font-medium transition-colors rounded-full px-4 py-2">Testimonials</a>
+                    <button id="dark-mode-toggle" class="p-2 text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white transition-colors" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <a href="sign-up.html" class="bg-blue-900 hover:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-full px-6 py-2 font-medium transition-colors shadow-md hover:shadow-lg">Get Started</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white fixed w-full z-40 mt-20 shadow-lg">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="#features" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-full">Features</a>
+            <a href="#pricing" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-full">Pricing</a>
+            <a href="#about" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-full">About</a>
+            <a href="#testimonials" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-full">Testimonials</a>
+            <a href="sign-up.html" class="block px-4 py-2 bg-blue-900 text-white rounded-full text-center font-medium hover:bg-blue-800">Get Started</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="bg-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center">
+                <!-- Left Content -->
+                <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
+                        Professional Invoicing Made <span class="text-blue-800">Simple</span> for Ghana
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8">
+                        Create, send, and track invoices in minutes. Join thousands of Ghanaian businesses that trust Invoicimi for their billing needs.
+                    </p>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
+                        <a href="login.html" class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-full text-center transition-colors shadow-md hover:shadow-lg">
+                            Start Free Trial
+                        </a>
+                        <a href="#pricing" class="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-bold py-3 px-6 rounded-full text-center transition-colors flex items-center justify-center">
+                            View Plans <span class="text-blue-800 ml-2">from GH₵49/mo</span>
+                        </a>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="space-y-3 mb-8">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>No credit card required</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-bolt text-yellow-500 mr-2"></i>
+                            <span>Set up in 2 minutes</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-lock text-blue-500 mr-2"></i>
+                            <span>Secure & private</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Options -->
+                    <div class="mt-8">
+                        <p class="text-sm text-gray-500 mb-2">Flexible payment options:</p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-full flex items-center">
+                                <i class="fab fa-cc-visa text-blue-800 mr-1"></i> Card
+                            </span>
+                            <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-full flex items-center">
+                                <i class="fas fa-mobile-alt text-green-600 mr-1"></i> Mobile Money
+                            </span>
+                            <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-full flex items-center">
+                                <i class="fas fa-university text-blue-600 mr-1"></i> Bank Transfer
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Image -->
+                <div class="lg:w-1/2 relative">
+                    <div class="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
+                        <img src="assets/image/hero-invoice.png" alt="Invoicimi Dashboard" class="w-full h-auto">
+                    </div>
+                    
+                    <!-- Pay As You Go Badge -->
+                    <div class="absolute -bottom-6 right-0 bg-white rounded-lg shadow-lg p-4 w-74 border border-gray-100">
+                        <div class="flex items-start mb-3">
+                            <div class="bg-yellow-100 p-2 rounded-full mr-3">
+                                <i class="fas fa-bolt text-yellow-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900">Try Pay As You Go</h4>
+                                <p class="text-sm text-gray-500">No subscription needed<span class="text-blue-600">GH₵5</span> per invoice</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm">
+                                Only <span class="font-bold text-lg text-blue-600">GH₵5</span> per invoice
+                            </p>
+                            <a href="pay.html" class="bg-blue-900 hover:bg-blue-800 text-white text-sm font-medium py-2 px-4 rounded-full transition-colors">
+                                Create Invoice
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Methods -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-gray-500 mb-8">ACCEPTED PAYMENT METHODS</p>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                <img src="https://via.placeholder.com/150x60/e5e7eb/9ca3af?text=MTN+MoMo" alt="MTN Mobile Money" class="h-10 md:h-12 opacity-80 hover:opacity-100 transition-opacity">
+                <img src="https://via.placeholder.com/150x60/e5e7eb/9ca3af?text=Vodafone+Cash" alt="Vodafone Cash" class="h-10 md:h-12 opacity-80 hover:opacity-100 transition-opacity">
+                <img src="https://via.placeholder.com/150x60/e5e7eb/9ca3af?text=Paystack" alt="Paystack" class="h-10 md:h-12 opacity-80 hover:opacity-100 transition-opacity">
+                <img src="https://via.placeholder.com/150x60/e5e7eb/9ca3af?text=Visa" alt="Visa" class="h-8 md:h-10 opacity-80 hover:opacity-100 transition-opacity">
+                <img src="https://via.placeholder.com/150x60/e5e7eb/9ca3af?text=Mastercard" alt="Mastercard" class="h-8 md:h-10 opacity-80 hover:opacity-100 transition-opacity">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Everything You Need to Get Paid</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Streamline your invoicing process and get paid faster with our powerful features</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md">
+                    <div class="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-bolt text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Quick Invoicing</h3>
+                    <p class="text-gray-600">Create professional invoices in seconds with our intuitive interface and customizable templates.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md">
+                    <div class="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-mobile-alt text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Mobile Money Integration</h3>
+                    <p class="text-gray-600">Accept payments via MTN Mobile Money and Vodafone Cash directly on your invoices.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md">
+                    <div class="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Real-time Analytics</h3>
+                    <p class="text-gray-600">Track your income, expenses, and outstanding payments with our comprehensive dashboard.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md">
+                    <div class="w-14 h-14 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-sync-alt text-2xl text-yellow-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Recurring Billing</h3>
+                    <p class="text-gray-600">Set up automatic recurring invoices for your regular clients and save time.</p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md">
+                    <div class="w-14 h-14 bg-red-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-2xl text-red-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Secure & Compliant</h3>
+                    <p class="text-gray-600">Bank-level security and compliance with Ghanaian tax regulations.</p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-headset text-2xl text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">24/7 Support</h3>
+                    <p class="text-gray-600">Our dedicated support team is always ready to assist you with any questions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Choose the plan that works best for your business</p>
+                <div class="mt-8 inline-flex p-1 bg-gray-100 rounded-full">
+                    <button id="toggle-monthly" class="px-6 py-2 rounded-full font-medium bg-blue-900 text-white">Monthly</button>
+                    <button id="toggle-annual" class="px-6 py-2 rounded-full font-medium text-gray-700">Annual (Save 20%)</button>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Free Plan -->
+                <div class="border rounded-2xl p-8 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">Starter</h3>
+                    <p class="text-gray-600 mb-6">Perfect for freelancers and small businesses</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold">GH₵0</span>
+                        <span class="text-gray-500">/month</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>3 invoices/month</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Basic invoice templates</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Email support</span>
+                        </li>
+                        <li class="flex items-start text-gray-400">
+                            <i class="fas fa-times mt-1 mr-3"></i>
+                            <span>No mobile money payments</span>
+                        </li>
+                        <li class="flex items-start text-gray-400">
+                            <i class="fas fa-times mt-1 mr-3"></i>
+                            <span>No recurring billing</span>
+                        </li>
+                        <button data-upgrade-plan="free" class="bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold py-3 px-6 rounded-full">
+                            Get Started Free
+                        </button>
+                    </ul>
+                    <!-- Add this to your pricing section for each plan's "Get Started" button -->
+                    <button data-upgrade-plan="professional" class="upgrade-btn">Upgrade to Professional</button>
+                </div>
+
+                <!-- Popular Plan -->
+                <div class="border-2 border-blue-900 rounded-2xl p-8 flex flex-col relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-900 text-white text-xs font-bold px-4 py-1 rounded-bl-lg">MOST POPULAR</div>
+                    <h3 class="text-2xl font-bold mb-2">Professional</h3>
+                    <p class="text-gray-600 mb-6">Ideal for growing businesses</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold">GH₵49</span>
+                        <span class="text-gray-500">/month</span>
+                        <p class="text-sm text-gray-500 mt-1">Billed monthly</p>
+                        <p class="text-sm text-green-600 font-medium">GH₵39/mo when billed annually</p>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>50 invoices/month</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Premium invoice templates</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Mobile money payments</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Recurring billing</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Priority email & chat support</span>
+                        </li>
+                    </ul>
+                    <button data-upgrade-plan="professional" class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-full">
+                        Start 14-Day Free Trial
+                    </button>
+                </div>
+
+                <!-- Business Plan -->
+                <div class="border rounded-2xl p-8 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">Business</h3>
+                    <p class="text-gray-600 mb-6">For established businesses with high volume</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold">GH₵149</span>
+                        <span class="text-gray-500">/month</span>
+                        <p class="text-sm text-gray-500 mt-1">Billed monthly</p>
+                        <p class="text-sm text-green-600 font-medium">GH₵119/mo when billed annually</p>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Unlimited invoices</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Custom invoice templates</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Multi-user access</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Advanced reporting</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>24/7 priority support</span>
+                        </li>
+                    </ul>
+                    <button data-upgrade-plan="business" class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-full">
+                        Contact Sales
+                    </button>
+            </div>
+
+            <!-- Pay As You Go -->
+            <div class="mt-16 max-w-4xl mx-auto bg-blue-50 rounded-2xl p-8 text-center">
+                <h3 class="text-2xl font-bold mb-4">Pay As You Go</h3>
+                <p class="text-gray-700 mb-6 max-w-2xl mx-auto">Don't want a subscription? Pay only for what you use at GH₵5 per invoice.</p>
+                <a href="pay.html" class="inline-block bg-blu--900900 hover:bluel8e-800 tewhitw font-bold py-3 px-6 rounded-fulfll transition-colors shadow-md hover:shadow-lg">
+                    Learn More About Pay As You Go
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">About Invoicimi</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Empowering Ghanaian businesses with simple, affordable invoicing solutions</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Our Story</h3>
+                    <p class="text-gray-600 mb-6">Founded in 2023, Invoicimi was born out of a simple idea: to make professional invoicing accessible to every Ghanaian business owner, regardless of size or technical expertise.</p>
+                    <p class="text-gray-600 mb-6">We understand the challenges of running a business in Ghana, from managing cash flow to dealing with late payments. That's why we've built a platform that's tailored specifically for the Ghanaian market.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-check text-blue-600"></i>
+                            </div>
+                            <span class="font-medium">Easy to Use</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-shield-alt text-green-600"></i>
+                            </div>
+                            <span class="font-medium">Secure</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-headset text-purple-600"></i>
+                            </div>
+                            <span class="font-medium">24/7 Support</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-2 rounded-2xl shadow-xl">
+                    <img src="https://via.placeholder.com/600x400/f8fafc/1e40af?text=Our+Team" alt="Our Team" class="rounded-xl w-full h-auto">
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="mt-20">
+                <h3 class="text-2xl font-bold text-center mb-12">Meet Our Team</h3>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Team Member 1 -->
+                    <div class="staff-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Team Member" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-bold text-lg">Kwame Osei</h4>
+                            <p class="text-blue-600 text-sm font-medium mb-2">CEO & Founder</p>
+                            <p class="text-gray-600 text-sm">Former fintech executive with 10+ years of experience in payment solutions.</p>
+                            <div class="flex space-x-3 mt-4">
+                                <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Team Member 2 -->
+                    <div class="staff-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Team Member" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-bold text-lg">Ama Mensah</h4>
+                            <p class="text-blue-600 text-sm font-medium mb-2">Head of Product</p>
+                            <p class="text-gray-600 text-sm">Product designer passionate about creating intuitive user experiences.</p>
+                            <div class="flex space-x-3 mt-4">
+                                <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-gray-400 hover:text-pink-600"><i class="fab fa-dribbble"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Team Member 3 -->
+                    <div class="staff-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Team Member" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-bold text-lg">Kofi Asare</h4>
+                            <p class="text-blue-600 text-sm font-medium mb-2">Lead Developer</p>
+                            <p class="text-gray-600 text-sm">Full-stack developer with expertise in building scalable web applications.</p>
+                            <div class="flex space-x-3 mt-4">
+                                <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Team Member 4 -->
+                    <div class="staff-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Team Member" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-bold text-lg">Esi Boateng</h4>
+                            <p class="text-blue-600 text-sm font-medium mb-2">Customer Success</p>
+                            <p class="text-gray-600 text-sm">Dedicated to ensuring our customers get the most out of Invoicimi.</p>
+                            <div class="flex space-x-3 mt-4">
+                                <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-gray-400 hover:text-pink-600"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Have questions? We're here to help you get started with Invoicimi</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-start">
+                <!-- Contact Form -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <h3 class="text-2xl font-bold mb-6">Send us a message</h3>
+                    <form id="contactForm" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <input type="text" id="name" name="name" required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                            <input type="email" id="email" name="email" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                            <input type="text" id="subject" name="subject" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
+                            <textarea id="message" name="message" rows="4" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"></textarea>
+                        </div>
+                        <button type="submit" 
+                            class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-md hover:shadow-lg">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">Contact Information</h3>
+                        <p class="text-gray-600">Have questions about our plans or need help getting started? Reach out to our team and we'll get back to you as soon as possible.</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-envelope text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-medium text-gray-900">Email Us</h4>
+                                <p class="text-gray-600">support@invoicimi.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-phone-alt text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-medium text-gray-900">Call Us</h4>
+                                <p class="text-gray-600">+233 50 123 4567</p>
+                                <p class="text-sm text-gray-500">Monday - Friday, 9:00 AM - 5:00 PM GMT</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-map-marker-alt text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-medium text-gray-900">Our Office</h4>
+                                <p class="text-gray-600">123 Business Avenue</p>
+                                <p class="text-gray-600">Accra, Ghana</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <h4 class="font-medium text-gray-900 mb-3">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                                <i class="fab fa-twitter text-2xl"></i>
+                                <span class="sr-only">Twitter</span>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                                <i class="fab fa-facebook text-2xl"></i>
+                                <span class="sr-only">Facebook</span>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                                <i class="fab fa-linkedin text-2xl"></i>
+                                <span class="sr-only">LinkedIn</span>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                                <i class="fab fa-instagram text-2xl"></i>
+                                <span class="sr-only">Instagram</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">What Our Customers Say</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Don't just take our word for it. Here's what our customers have to say about us.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Customer" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Adwoa Asante</h4>
+                            <p class="text-sm text-gray-500">Freelance Graphic Designer</p>
+                        </div>
+                    </div>
+                    <div class="text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 italic">"Invoicimi has completely transformed how I manage my freelance business. I can create and send professional invoices in minutes, and the mobile money integration is a game-changer!"</p>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Customer" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Kwabena Ofori</h4>
+                            <p class="text-sm text-gray-500">Small Business Owner</p>
+                        </div>
+                    </div>
+                    <div class="text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 italic">"The best invoicing solution for Ghanaian businesses. The customer support is exceptional, and the platform is so easy to use. Highly recommended!"</p>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Customer" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Akosua Agyemang</h4>
+                            <p class="text-sm text-gray-500">E-commerce Store Owner</p>
+                        </div>
+                    </div>
+                    <div class="text-yellow-400 mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 italic">"Switching to Invoicimi was the best decision for my business. The recurring billing feature saves me so much time, and my clients love the professional look of the invoices."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <!-- Company Info -->
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4">Invoicimi</h3>
+                    <p class="text-gray-400 mb-6">Professional invoicing made simple for Ghanaian businesses. Create, send, and manage invoices in minutes.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#testimonials" class="text-gray-400 hover:text-white transition-colors">Testimonials</a></li>
+                        <li><a href="pay.html" class="text-gray-400 hover:text-white transition-colors">Pay As You Go</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope text-blue-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">hello@invoicimi.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt text-blue-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">+233 50 123 4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">Accra, Ghana</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 Invoicimi. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Toggle between monthly and annual pricing
+        const toggleMonthly = document.getElementById('toggle-monthly');
+        const toggleAnnual = document.getElementById('toggle-annual');
+        
+        toggleMonthly.addEventListener('click', () => {
+            toggleMonthly.classList.add('bg-blue-900', 'text-white');
+            toggleMonthly.classList.remove('text-gray-700');
+            toggleAnnual.classList.remove('bg-blue-900', 'text-white');
+            toggleAnnual.classList.add('text-gray-700');
+            // Update prices to monthly
+            document.querySelectorAll('.monthly-price').forEach(el => el.classList.remove('hidden'));
+            document.querySelectorAll('.annual-price').forEach(el => el.classList.add('hidden'));
+        });
+        
+        toggleAnnual.addEventListener('click', () => {
+            toggleAnnual.classList.add('bg-blue-900', 'text-white');
+            toggleAnnual.classList.remove('text-gray-700');
+            toggleMonthly.classList.remove('bg-blue-900', 'text-white');
+            toggleMonthly.classList.add('text-gray-700');
+            // Update prices to annual
+            document.querySelectorAll('.annual-price').forEach(el => el.classList.remove('hidden'));
+            document.querySelectorAll('.monthly-price').forEach(el => el.classList.add('hidden'));
+        });
+    </script>
+    <script>
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+        });
+    </script>
+</body>
+</html>

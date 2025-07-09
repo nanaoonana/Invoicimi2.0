@@ -1,0 +1,94 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Invoicimi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+        .login-container {
+            min-height: 100vh;
+        }
+        .card {
+            max-width: 400px;
+            width: 90%;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <div class="login-container flex items-center justify-center p-4">
+        <div class="card bg-white rounded-xl shadow-lg p-8 w-full">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-blue-900 mb-2">Invoicimi</h1>
+                <p class="text-gray-600">Sign in to your account</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-envelope text-gray-400"></i>
+                        </div>
+                        <input type="email" id="email" name="email" required
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="you@example.com">
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Forgot password?</a>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input type="password" id="password" name="password" required
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="••••••••">
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <input id="remember" name="remember" type="checkbox" 
+                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="remember" class="ml-2 block text-sm text-gray-700">
+                        Remember me
+                    </label>
+                </div>
+                
+                <button type="submit"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Sign in
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account? 
+                    <a href="signup.html" class="font-medium text-blue-600 hover:text-blue-800">
+                        Sign up
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add your login logic here
+            console.log('Login form submitted');
+            // Redirect to dashboard on successful login
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>

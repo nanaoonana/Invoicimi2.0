@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay-As-You-Go - Invoicimi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .payment-option {
+            transition: all 0.3s;
+        }
+        .payment-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .payment-option.selected {
+            border-color: #1214b6;
+            background-color: #f0f4ff;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold text-blue-900">Invoicimi</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#" class="text-gray-700 hover:text-blue-900 px-3 py-2">Pricing</a>
+                    <a href="dashboard.html" class="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800">Go to Dashboard</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Progress Steps -->
+        <div class="mb-12">
+            <div class="flex items-center justify-center">
+                <div class="flex items-center">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-900 text-white font-semibold">
+                        1
+                    </div>
+                    <div class="hidden sm:block ml-2 text-sm font-medium text-blue-900">Payment Method</div>
+                </div>
+                <div class="flex-auto border-t-2 border-gray-200"></div>
+                <div class="flex items-center">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 bg-white text-gray-500 font-semibold">
+                        2
+                    </div>
+                    <div class="hidden sm:block ml-2 text-sm font-medium text-gray-500">Confirmation</div>
+                </div>
+                <div class="flex-auto border-t-2 border-gray-200"></div>
+                <div class="flex items-center">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 bg-white text-gray-500 font-semibold">
+                        3
+                    </div>
+                    <div class="hidden sm:block ml-2 text-sm font-medium text-gray-500">Complete</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6 md:p-8">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Pay-As-You-Go Invoice Credits</h1>
+                <p class="text-gray-600 mb-8">Add credits to your account and only pay for the invoices you send.</p>
+                
+                <!-- Payment Options -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-semibold mb-4">Select Payment Method</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- MTN Mobile Money -->
+                        <div class="payment-option border-2 rounded-lg p-4 cursor-pointer" onclick="selectPayment('mtn')">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-yellow-50 rounded-lg flex items-center justify-center mr-4">
+                                    <img src="https://via.placeholder.com/40x40?text=MTN" alt="MTN Mobile Money" class="h-8">
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">MTN Mobile Money</h3>
+                                    <p class="text-sm text-gray-500">Pay with your MTN mobile money account</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Vodafone Cash -->
+                        <div class="payment-option border-2 rounded-lg p-4 cursor-pointer" onclick="selectPayment('vodafone')">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mr-4">
+                                    <img src="https://via.placeholder.com/40x40?text=Voda" alt="Vodafone Cash" class="h-8">
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Vodafone Cash</h3>
+                                    <p class="text-sm text-gray-500">Pay with your Vodafone Cash account</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Credits -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-semibold mb-4">Select Number of Invoices</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="credit-option border-2 rounded-lg p-4 text-center cursor-pointer" onclick="selectCredit(5, 25)">
+                            <p class="text-2xl font-bold">5</p>
+                            <p class="text-gray-600">Invoices</p>
+                            <p class="mt-2 font-medium">GH₵ 25.00</p>
+                            <p class="text-sm text-gray-500">GH₵ 5.00 each</p>
+                        </div>
+                        <div class="credit-option border-2 rounded-lg p-4 text-center cursor-pointer" onclick="selectCredit(10, 45)">
+                            <p class="text-2xl font-bold">10</p>
+                            <p class="text-gray-600">Invoices</p>
+                            <p class="mt-2 font-medium">GH₵ 45.00</p>
+                            <p class="text-sm text-green-600 font-medium">Save 10%</p>
+                        </div>
+                        <div class="credit-option border-2 rounded-lg p-4 text-center cursor-pointer" onclick="selectCredit(25, 100)">
+                            <p class="text-2xl font-bold">25</p>
+                            <p class="text-gray-600">Invoices</p>
+                            <p class="mt-2 font-medium">GH₵ 100.00</p>
+                            <p class="text-sm text-green-600 font-medium">Save 20%</p>
+                        </div>
+                        <div class="credit-option border-2 rounded-lg p-4 text-center cursor-pointer" onclick="selectCredit(50, 175)">
+                            <p class="text-2xl font-bold">50</p>
+                            <p class="text-gray-600">Invoices</p>
+                            <p class="mt-2 font-medium">GH₵ 175.00</p>
+                            <p class="text-sm text-green-600 font-medium">Save 30%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Form -->
+                <div id="payment-form" class="hidden">
+                    <h2 class="text-lg font-semibold mb-4">Payment Details</h2>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">
+                                    You'll receive a payment request on your mobile phone to complete this transaction.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="mtn-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">MTN Mobile Number</label>
+                            <div class="mt-1 flex rounded-md shadow-sm">
+                                <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                                    +233
+                                </span>
+                                <input type="tel" class="focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300" placeholder="24 123 4567" required>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-600">Invoice Credits:</span>
+                                <span id="invoice-count" class="font-medium">0</span>
+                            </div>
+                            <div class="flex justify-between text-lg font-semibold border-t pt-2">
+                                <span>Total Amount:</span>
+                                <span id="total-amount">GH₵ 0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input id="terms" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" required>
+                            <label for="terms" class="ml-2 block text-sm text-gray-700">
+                                I agree to the <a href="#" class="text-blue-600 hover:text-blue-800">Terms of Service</a> and <a href="#" class="text-blue-600 hover:text-blue-800">Privacy Policy</a>
+                            </label>
+                        </div>
+                        
+                        <div class="pt-4">
+                            <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-md flex items-center justify-center">
+                                <i class="fas fa-lock mr-2"></i> Pay Now - <span id="pay-amount">GH₵ 0.00</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Payment Processing -->
+                <div id="processing-payment" class="hidden text-center py-12">
+                    <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mx-auto mb-6"></div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Processing Your Payment</h3>
+                    <p class="text-gray-600 max-w-md mx-auto">Please check your phone and approve the payment request to complete your purchase.</p>
+                </div>
+
+                <!-- Payment Success -->
+                <div id="payment-success" class="hidden text-center py-12">
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+                        <i class="fas fa-check text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Payment Successful!</h3>
+                    <p class="text-gray-600 mb-6">Your account has been credited with <span id="success-credits" class="font-semibold">0</span> invoice credits.</p>
+                    <div class="mt-6">
+                        <a href="dashboard.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-900 hover:bg-blue-800">
+                            Go to Dashboard
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Invoicimi</h3>
+                    <p class="text-gray-400">Professional invoicing made simple for Ghanaian businesses.</p>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Features</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-white">Pricing</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Need Help?</h4>
+                    <p class="text-gray-400 mb-2">support@invoicimi.com</p>
+                    <p class="text-gray-400">+233 24 123 4567</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Invoicimi. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Payment selection
+        let selectedPaymentMethod = null;
+        let selectedCredits = 0;
+        let selectedAmount = 0;
+
+        function selectPayment(method) {
+            // Remove selection from all payment options
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected', 'border-blue-600');
+                option.classList.add('border-gray-200');
+            });
+            
+            // Add selection to clicked option
+            const selectedOption = event.currentTarget;
+            selectedOption.classList.add('selected', 'border-blue-600');
+            selectedOption.classList.remove('border-gray-200');
+            
+            selectedPaymentMethod = method;
+            
+            // Show payment form if credits are already selected
+            if (selectedCredits > 0) {
+                document.getElementById('payment-form').classList.remove('hidden');
+            }
+        }
+
+        function selectCredit(credits, amount) {
+            // Remove selection from all credit options
+            document.querySelectorAll('.credit-option').forEach(option => {
+                option.classList.remove('border-blue-600', 'bg-blue-50');
+                option.classList.add('border-gray-200');
+            });
+            
+            // Add selection to clicked option
+            const selectedOption = event.currentTarget;
+            selectedOption.classList.add('border-blue-600', 'bg-blue-50');
+            selectedOption.classList.remove('border-gray-200');
+            
+            selectedCredits = credits;
+            selectedAmount = amount;
+            
+            // Update the form
+            document.getElementById('invoice-count').textContent = credits;
+            document.getElementById('total-amount').textContent = `GH₵ ${amount.toFixed(2)}`;
+            document.getElementById('pay-amount').textContent = `GH₵ ${amount.toFixed(2)}`;
+            
+            // Show payment form if payment method is already selected
+            if (selectedPaymentMethod) {
+                document.getElementById('payment-form').classList.remove('hidden');
+            }
+        }
+
+        // Form submission
+        document.getElementById('mtn-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show processing state
+            document.getElementById('payment-form').classList.add('hidden');
+            document.getElementById('processing-payment').classList.remove('hidden');
+            
+            // Simulate payment processing
+            setTimeout(function() {
+                document.getElementById('processing-payment').classList.add('hidden');
+                document.getElementById('payment-success').classList.remove('hidden');
+                document.getElementById('success-credits').textContent = selectedCredits;
+                
+                // In a real app, you would handle the payment confirmation here
+                // and update the user's account with the purchased credits
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

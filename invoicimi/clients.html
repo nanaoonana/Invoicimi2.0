@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients - Invoicimi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 40;
+                height: 100vh;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="sidebar bg-blue-900 text-white flex-shrink-0">
+        <div class="p-4 border-b border-blue-800">
+            <h2 class="text-xl font-bold">Invoicimi</h2>
+            <p class="text-blue-200 text-sm">Clients</p>
+        </div>
+        <nav class="mt-4">
+            <a href="dashboard.html" class="flex items-center px-4 py-3 text-blue-100 hover:bg-blue-800">
+                <i class="fas fa-home w-6"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="invoices.html" class="flex items-center px-4 py-3 text-blue-100 hover:bg-blue-800">
+                <i class="fas fa-file-invoice-dollar w-6"></i>
+                <span>Invoices</span>
+            </a>
+            <a href="clients.html" class="flex items-center px-4 py-3 bg-blue-800 text-white">
+                <i class="fas fa-users w-6"></i>
+                <span>Clients</span>
+            </a>
+            <a href="settings.html" class="flex items-center px-4 py-3 text-blue-100 hover:bg-blue-800">
+                <i class="fas fa-cog w-6"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 overflow-auto">
+        <div class="p-4 md:p-8">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                <div class="mb-4 md:mb-0">
+                    <h1 class="text-2xl font-bold text-gray-800">Clients</h1>
+                    <p class="text-gray-600">Manage your clients and their information</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <div class="relative flex-1">
+                        <input type="text" placeholder="Search clients..." class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                    <button id="add-client-btn" class="bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded-lg flex items-center justify-center whitespace-nowrap">
+                        <i class="fas fa-plus mr-2"></i> Add Client
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">Total Clients</p>
+                            <h3 class="text-2xl font-bold">48</h3>
+                        </div>
+                        <div class="p-2 bg-blue-50 rounded-full">
+                            <i class="fas fa-users text-blue-500"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-green-500 mt-1">+5 from last month</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">Active</p>
+                            <h3 class="text-2xl font-bold">42</h3>
+                        </div>
+                        <div class="p-2 bg-green-50 rounded-full">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">87.5% active rate</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-purple-500">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">Total Invoiced</p>
+                            <h3 class="text-2xl font-bold">GH₵24,890</h3>
+                        </div>
+                        <div class="p-2 bg-purple-50 rounded-full">
+                            <i class="fas fa-file-invoice-dollar text-purple-500"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-green-500 mt-1">+12% from last month</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">Avg. Invoice</p>
+                            <h3 class="text-2xl font-bold">GH₵518</h3>
+                        </div>
+                        <div class="p-2 bg-yellow-50 rounded-full">
+                            <i class="fas fa-chart-line text-yellow-500"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Last 30 days</p>
+                </div>
+            </div>
+
+            <!-- Clients Table -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <h2 class="text-lg font-semibold text-gray-800">All Clients</h2>
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <select class="border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option>All Status</option>
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <button class="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-download"></i>
+                            <span>Export</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total Invoiced</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Activity</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Client 1 -->
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold text-lg mr-3">
+                                            KM
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Kofi Mensah</div>
+                                            <div class="text-xs text-gray-500">ABC Company</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">kofi.mensah@example.com</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">+233 24 123 4567</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    GH₵5,420.00
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <div class="flex items-center">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></span>
+                                        Active - 2 days ago
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <button class="text-blue-600 hover:text-blue-900" title="View Invoices">
+                                            <i class="fas fa-file-invoice"></i>
+                                        </button>
+                                        <button class="text-gray-600 hover:text-gray-900 edit-client" data-client-id="1" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <div class="relative inline-block text-left" x-data="{ open: false }">
+                                            <button @click="open = !open" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                                                <div class="py-1">
+                                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Send Email</a>
+                                                    <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Deactivate</a>
+                                                    <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Delete</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- More client rows... -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="bg-white px-6 py-4 border-t border-gray-200">
+                    <div class="flex flex-col md:flex-row items-center justify-between">
+                        <div class="mb-4 md:mb-0">
+                            <p class="text-sm text-gray-700">
+                                Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">48</span> clients
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                Previous
+                            </button>
+                            <button class="px-3 py-1 border rounded-md text-sm font-medium text-white bg-blue-900 hover:bg-blue-800">
+                                1
+                            </button>
+                            <button class="px-3 py-1 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                2
+                            </button>
+                            <button class="px-3 py-1 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                3
+                            </button>
+                            <button class="px-3 py-1 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Client Modal -->
+    <div id="client-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold" id="modal-title">Add New Client</h3>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="client-form" class="p-6">
+                <input type="hidden" id="client-id">
+                
+                <div class="mb-6">
+                    <label for="client-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name <span class="text-red-500">*</span></label>
+                    <input type="text" id="client-name" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="client-email" class="block text-sm font-medium text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
+                        <input type="email" id="client-email" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label for="client-phone" class="block text-sm font-medium text-gray-700 mb-2">Phone <span class="text-red-500">*</span></label>
+                        <input type="tel" id="client-phone" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="client-company" class="block text-sm font-medium text-gray-700 mb-2">Business Name</label>
+                    <input type="text" id="client-company" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="mb-6">
+                    <label for="client-notes" class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                    <textarea id="client-notes" rows="3" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-client" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800">
+                        Save Client
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mobile menu button -->
+    <button class="md:hidden fixed bottom-4 right-4 bg-blue-900 text-white p-3 rounded-full shadow-lg z-30" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.overlay').classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.querySelector('.overlay').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.remove('active');
+            this.classList.remove('active');
+        });
+
+        // Client Modal
+        const clientModal = document.getElementById('client-modal');
+        const addClientBtn = document.getElementById('add-client-btn');
+        const closeModalBtn = document.getElementById('close-modal');
+        const cancelBtn = document.getElementById('cancel-client');
+        const clientForm = document.getElementById('client-form');
+        const modalTitle = document.getElementById('modal-title');
+
+        // Open modal for new client
+        addClientBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'Add New Client';
+            clientForm.reset();
+            clientModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Close modal
+        function closeModal() {
+            clientModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === clientModal) {
+                closeModal();
+            }
+        });
+
+        // Handle edit client
+        document.querySelectorAll('.edit-client').forEach(button => {
+            button.addEventListener('click', function() {
+                const clientId = this.getAttribute('data-client-id');
+                // In a real app, you would fetch client data by ID
+                modalTitle.textContent = 'Edit Client';
+                document.getElementById('client-id').value = clientId;
+                // Set form values from client data
+                clientModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Handle form submission
+        clientForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Handle form submission (save/update client)
+            console.log('Form submitted', {
+                id: document.getElementById('client-id').value,
+                name: document.getElementById('client-name').value,
+                email: document.getElementById('client-email').value,
+                phone: document.getElementById('client-phone').value,
+                company: document.getElementById('client-company').value,
+                notes: document.getElementById('client-notes').value
+            });
+            
+            // Close modal after submission
+            closeModal();
+            
+            // Show success message
+            alert('Client saved successfully!');
+        });
+    </script>
+</body>
+</html>
